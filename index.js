@@ -457,12 +457,15 @@ function splitLanguageUnits(line) {
 function isTargetLanguageUnit(unit, language) {
     const text = String(unit || '');
     const japaneseCount = (text.match(/[\u3040-\u30ff\u3400-\u9fff々〆ヵヶ]/g) || []).length;
+    const koreanCount = (text.match(/[가-힣]/g) || []).length;
     const englishWords = text.match(/[A-Za-z]+(?:['’\-][A-Za-z]+)*/g) || [];
     const englishCount = englishWords.join('').length;
     if (language === 'ja') return japaneseCount > 0;
     if (!englishWords.some((word) => word.length >= 2)) return false;
     // 'AIを使う'처럼 짧은 영문 표기가 들어간 일본어 문장을 영어로 오인하지 않는다.
     if (japaneseCount > 0 && englishCount < Math.max(6, japaneseCount * 2)) return false;
+    // 'AI 응답을 분석한다'처럼 영문 약어 하나가 섞인 한국어 추론을 영어로 오인하지 않는다.
+    if (koreanCount > 0 && englishCount < koreanCount) return false;
     return true;
 }
 
@@ -474,10 +477,12 @@ function cleanTargetLanguageUnit(unit, language) {
     text = text.replace(nonTargetInBrackets, '').trim();
     if (language === 'ja') {
         text = text.replace(/^[가-힣][가-힣\s·_-]{0,30}[:：]\s*/, '');
+        text = text.replace(/[가-힣]+/g, ' ');
     } else {
         text = text.replace(/^[가-힣\u3040-\u30ff\u3400-\u9fff][가-힣\u3040-\u30ff\u3400-\u9fff\s·_-]{0,30}[:：]\s*/, '');
+        text = text.replace(/[가-힣\u3040-\u30ff\u3400-\u9fff々〆ヵヶ]+/g, ' ');
     }
-    return text.trim();
+    return text.replace(/[ \t]{2,}/g, ' ').replace(/\s+([,.!?。！？])/g, '$1').trim();
 }
 
 function filterTextByLanguage(text, language) {
@@ -497,7 +502,7 @@ function uniqueText(items) {
 
 function stripEmbeddedMetadata(message) {
     let text = String(message || '').replace(/\r\n?/g, '\n');
-    const metadataBlock = /<(status|state|system|metadata|meta|ooc|scene|narration|thought|thinking|analysis|memory|lore|author_note|summary|settings|hidden)\b[^>]*>[\s\S]*?<\/\1\s*>/gi;
+    const metadataBlock = /<(status|state|system|metadata|meta|ooc|scene|narration|think|thought|thinking|analysis|reasoning|reason|reflection|scratchpad|internal|memory|lore|author_note|summary|settings|hidden|추론|생각|사고|내면|상태|상태창|메타|설정)(?:\s[^>]*)?>[\s\S]*?<\/\1\s*>/gi;
     while (metadataBlock.test(text)) {
         text = text.replace(metadataBlock, '');
         metadataBlock.lastIndex = 0;
@@ -505,6 +510,12 @@ function stripEmbeddedMetadata(message) {
     text = text
         .replace(/<!--[\s\S]*?-->/g, '')
         .replace(/<br\s*\/?>/gi, '\n')
+        // 일반 서식 태그는 안쪽의 실제 대화를 보존한다.
+        .replace(/<\/?(?:a|abbr|b|blockquote|center|code|dd|del|div|dl|dt|em|font|h[1-6]|i|ins|kbd|li|mark|ol|p|pre|q|rp|rt|ruby|s|samp|small|span|strong|sub|sup|table|tbody|td|tfoot|th|thead|tr|u|ul|var)(?:\s[^>]*)?>/gi, '')
+        // 그 밖의 사용자 정의 태그는 상태창·추론용으로 보고 내용째 제외한다.
+        .replace(/<([A-Za-z가-힣_][A-Za-z0-9가-힣_.:-]*)(?:\s[^>]*)?>[\s\S]*?<\/\1\s*>/gi, '')
+        // 닫는 태그 없이 응답 끝까지 이어진 대표적인 추론 블록도 제외한다.
+        .replace(/<(?:think|thought|thinking|analysis|reasoning|reason|reflection|scratchpad|internal|추론|생각|사고|내면)(?:\s[^>]*)?>[\s\S]*$/gi, '')
         .replace(/<[^>]*>/g, '')
         .replace(/\n{3,}/g, '\n\n')
         .trim();
