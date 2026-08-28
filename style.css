@@ -1,0 +1,1428 @@
+/*
+ * ChatLingo base theme
+ * Edit the variables in this block to make a new visual theme.
+ * This default deliberately does not inherit SillyTavern theme colors.
+ */
+.chatlingo-panel {
+    --cl-canvas: #ffffff;
+    --cl-surface: #ffffff;
+    --cl-surface-subtle: #f7f7f7;
+    --cl-surface-hover: #f1f1f1;
+    --cl-ink: #111111;
+    --cl-ink-soft: #565656;
+    --cl-ink-faint: #858585;
+    --cl-line: #e5e5e5;
+    --cl-line-strong: #cfcfcf;
+    --cl-focus: #111111;
+    --cl-radius: 12px;
+    --cl-radius-sm: 8px;
+    --cl-font: Pretendard, "Noto Sans KR", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    position: fixed;
+    z-index: 2147483000;
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+    display: flex !important;
+    flex-direction: column;
+    width: min(340px, calc(100vw - 24px));
+    height: min(720px, 80vh);
+    overflow: hidden;
+    box-sizing: border-box;
+    color: var(--cl-ink) !important;
+    background: var(--cl-canvas) !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: var(--cl-radius);
+    box-shadow: none !important;
+    font-family: var(--cl-font) !important;
+    font-size: 13px;
+    line-height: 1.45;
+    color-scheme: light;
+    opacity: 0;
+    visibility: hidden !important;
+    pointer-events: none;
+    transform: translateX(calc(100% + 28px));
+    transition: transform .2s ease, opacity .16s ease;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+.chatlingo-panel.is-open {
+    opacity: 1;
+    visibility: visible !important;
+    pointer-events: auto;
+    transform: translateX(0) !important;
+}
+
+.chatlingo-panel.is-collapsed {
+    width: 148px !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-tabs,
+.chatlingo-panel.is-collapsed .chatlingo-scroll {
+    display: none !important;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-header {
+    min-height: 42px;
+    padding: 6px 8px;
+    border-bottom: 0;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-brand small {
+    display: none;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-brand {
+    gap: 6px;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-logo {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-brand strong {
+    font-size: 12px;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-icon-btn {
+    width: 22px;
+    height: 22px;
+}
+
+.chatlingo-panel.is-collapsed .chatlingo-header-actions {
+    gap: 0;
+}
+
+.chatlingo-panel *,
+.chatlingo-panel *::before,
+.chatlingo-panel *::after {
+    box-sizing: border-box;
+    font-family: inherit;
+    text-shadow: none !important;
+}
+
+.chatlingo-panel {
+    text-shadow: none !important;
+}
+
+.chatlingo-panel button,
+.chatlingo-panel select,
+.chatlingo-panel textarea,
+.chatlingo-panel input {
+    font: inherit;
+    color: var(--cl-ink) !important;
+}
+
+.chatlingo-panel button {
+    border: 0;
+    cursor: pointer;
+}
+
+.chatlingo-svg-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+    vertical-align: -2px;
+    flex: 0 0 auto;
+}
+
+.chatlingo-icon-btn .chatlingo-svg-icon,
+.chatlingo-card-actions .chatlingo-svg-icon {
+    margin-right: 0;
+}
+
+.chatlingo-panel :focus-visible {
+    outline: 2px solid var(--cl-focus);
+    outline-offset: 2px;
+}
+
+/* Header */
+.chatlingo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 58px;
+    padding: 12px 13px;
+    border-bottom: 1px solid var(--cl-line);
+}
+
+.chatlingo-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chatlingo-logo {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    color: #111;
+    background: #fff;
+    border: 1px solid #cfcfcf;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -1.2px;
+    line-height: 1;
+}
+
+.chatlingo-logo span {
+    display: none;
+}
+
+.chatlingo-menu-entry {
+    display: grid !important;
+    grid-template-columns: 24px minmax(0, 1fr);
+    align-items: center;
+    min-height: 32px;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    gap: 10px;
+    line-height: 1 !important;
+    text-shadow: none !important;
+}
+
+.chatlingo-menu-entry * {
+    text-shadow: none !important;
+}
+
+.chatlingo-menu-logo {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    color: #111;
+    background: transparent !important;
+    border: 1px solid #cfcfcf;
+    border-radius: 7px;
+    font-family: Pretendard, "Noto Sans JP", sans-serif !important;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -1px;
+    line-height: 1;
+    align-self: center;
+    justify-self: center;
+    position: static;
+    transform: none !important;
+}
+
+.chatlingo-menu-entry > span:last-child {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px !important;
+    line-height: 1 !important;
+    transform: none !important;
+}
+
+.chatlingo-brand strong {
+    display: block;
+    color: var(--cl-ink);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+}
+
+.chatlingo-brand small {
+    display: block;
+    margin-top: 2px;
+    color: var(--cl-ink-faint);
+    font-size: 10px;
+    font-weight: 450;
+}
+
+.chatlingo-icon-btn {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    background: transparent !important;
+    color: var(--cl-ink-soft) !important;
+}
+
+.chatlingo-icon-btn:hover {
+    background: var(--cl-surface-subtle) !important;
+    color: var(--cl-ink) !important;
+}
+
+.chatlingo-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Tabs */
+.chatlingo-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 14px 16px 0;
+    padding: 3px;
+    background: var(--cl-surface-subtle);
+    border: 1px solid var(--cl-line);
+    border-radius: 9px;
+}
+
+.chatlingo-tab {
+    display: block !important;
+    width: 100% !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    flex: none !important;
+    border-radius: 6px;
+    background: transparent !important;
+    color: var(--cl-ink-soft) !important;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.chatlingo-tab small {
+    margin-left: 4px;
+    color: inherit;
+    font-size: 10px;
+    font-weight: 450;
+}
+
+.chatlingo-tab.is-active {
+    color: #fff !important;
+    background: #111 !important;
+}
+
+/* Content */
+.chatlingo-scroll {
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    padding: 14px 16px 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    overscroll-behavior-x: none;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-color: #c8c8c8 transparent;
+    scrollbar-width: thin;
+}
+
+.chatlingo-scroll > *,
+.chatlingo-input-card,
+.chatlingo-hero-result,
+.chatlingo-analysis-block,
+.chatlingo-book-section,
+.chatlingo-settings,
+.chatlingo-result,
+.chatlingo-word-list,
+.chatlingo-word-card {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.chatlingo-input-card,
+.chatlingo-hero-result,
+.chatlingo-analysis-block,
+.chatlingo-book-section,
+.chatlingo-settings {
+    margin: 0 0 12px;
+    padding: 14px;
+    background: var(--cl-surface) !important;
+    border: 1px solid var(--cl-line) !important;
+    border-radius: var(--cl-radius-sm);
+    box-shadow: none;
+}
+
+.chatlingo-section-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: var(--cl-ink);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.chatlingo-section-title span:last-child {
+    color: var(--cl-ink-faint);
+    font-weight: 450;
+}
+
+.chatlingo-panel textarea {
+    display: block;
+    width: 100%;
+    min-height: 104px;
+    padding: 10px 11px;
+    resize: vertical;
+    color: var(--cl-ink) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 7px;
+    outline: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.chatlingo-panel textarea::placeholder {
+    color: var(--cl-ink-faint);
+    opacity: 1;
+}
+
+.chatlingo-panel textarea:focus {
+    border-color: #111 !important;
+    box-shadow: none;
+    outline: none;
+}
+
+.chatlingo-panel textarea:focus-visible {
+    outline: none;
+}
+
+.chatlingo-source-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.chatlingo-source-actions button,
+.chatlingo-result-actions button,
+.chatlingo-card-actions button,
+.chatlingo-example button,
+.chatlingo-saved-word button {
+    background: #fff !important;
+    border: 1px solid var(--cl-line) !important;
+    border-radius: 6px;
+    color: var(--cl-ink-soft) !important;
+}
+
+.chatlingo-source-actions button {
+    min-height: 28px;
+    padding: 5px 8px;
+    font-size: 10px;
+}
+
+.chatlingo-source-actions button:hover,
+.chatlingo-result-actions button:hover,
+.chatlingo-card-actions button:hover,
+.chatlingo-example button:hover,
+.chatlingo-saved-word button:hover {
+    color: var(--cl-ink) !important;
+    background: var(--cl-surface-hover) !important;
+    border-color: var(--cl-line-strong) !important;
+}
+
+.chatlingo-context-details {
+    display: grid;
+    gap: 7px;
+    margin: 11px 0 0;
+}
+
+.chatlingo-context-details > label,
+.chatlingo-book-section > summary,
+.chatlingo-settings > summary {
+    color: var(--cl-ink-soft);
+    cursor: pointer;
+    list-style: none;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.chatlingo-wordbook-expand,
+.chatlingo-wordbook-focus-bar {
+    display: none;
+}
+
+.chatlingo-book-section[open] > .chatlingo-wordbook-expand {
+    display: block;
+    width: 100%;
+    min-height: 29px;
+    margin: 10px 0 8px;
+    padding: 4px 8px;
+    color: var(--cl-ink-soft) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 7px;
+    font-size: 10px;
+}
+
+.chatlingo-panel.is-wordbook-focus .chatlingo-tabs,
+.chatlingo-panel.is-wordbook-focus .chatlingo-input-card,
+.chatlingo-panel.is-wordbook-focus .chatlingo-status,
+.chatlingo-panel.is-wordbook-focus .chatlingo-result,
+.chatlingo-panel.is-wordbook-focus .chatlingo-settings,
+.chatlingo-panel.is-wordbook-focus .chatlingo-book-section > summary,
+.chatlingo-panel.is-wordbook-focus .chatlingo-wordbook-expand {
+    display: none !important;
+}
+
+.chatlingo-panel.is-wordbook-focus .chatlingo-scroll {
+    padding: 14px 18px 20px;
+}
+
+.chatlingo-panel.is-wordbook-focus .chatlingo-book-section {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: 0 !important;
+}
+
+.chatlingo-panel.is-wordbook-focus .chatlingo-book-section[open] {
+    display: block;
+}
+
+.chatlingo-panel.is-wordbook-focus #chatlingo-wordbook {
+    height: auto;
+    max-height: none !important;
+    overflow: visible;
+    padding-right: 0;
+}
+
+.chatlingo-panel.is-wordbook-focus .chatlingo-wordbook-focus-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 10px;
+}
+
+.chatlingo-wordbook-focus-bar strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.chatlingo-wordbook-focus-bar > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.chatlingo-wordbook-focus-bar button {
+    min-height: 28px;
+    padding: 4px 8px;
+    color: var(--cl-ink-soft) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 7px;
+    font-size: 10px;
+}
+
+.chatlingo-panel.is-wordbook-focus .chatlingo-wordbook-actions {
+    margin-top: 12px;
+}
+
+.chatlingo-book-section > summary::-webkit-details-marker,
+.chatlingo-settings > summary::-webkit-details-marker {
+    display: none;
+}
+
+.chatlingo-context-details > label span {
+    color: var(--cl-ink-faint);
+    font-weight: 400;
+}
+
+.chatlingo-context-details > p {
+    margin: -1px 0 0;
+    color: var(--cl-ink-faint);
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.chatlingo-context-details textarea {
+    min-height: 76px;
+    margin-top: 0;
+}
+
+.chatlingo-panel .chatlingo-primary {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 12px;
+    padding: 9px 12px;
+    border-radius: 7px;
+    color: var(--cl-ink) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.chatlingo-panel .chatlingo-primary:hover {
+    background: var(--cl-surface-hover) !important;
+    border-color: var(--cl-ink) !important;
+}
+
+.chatlingo-panel .chatlingo-primary[aria-busy="true"] {
+    color: var(--cl-ink-soft) !important;
+    background: var(--cl-surface-subtle) !important;
+    border-color: var(--cl-line-strong) !important;
+}
+
+.chatlingo-cancel {
+    margin-left: 5px;
+    font-size: 10px;
+    text-decoration: underline;
+}
+
+.chatlingo-spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    border: 2px solid rgb(17 17 17 / 18%);
+    border-top-color: #111;
+    border-radius: 50%;
+    vertical-align: -2px;
+    animation: cl-spin .75s linear infinite;
+}
+
+@keyframes cl-spin {
+    to { transform: rotate(360deg); }
+}
+
+.chatlingo-status {
+    margin: 0 0 12px;
+    padding: 9px 10px;
+    color: var(--cl-ink-soft);
+    background: var(--cl-surface-subtle) !important;
+    border: 1px solid var(--cl-line);
+    border-radius: 7px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* Empty and analysis result */
+.chatlingo-empty {
+    padding: 38px 20px;
+    color: var(--cl-ink-faint);
+    text-align: center;
+}
+
+.chatlingo-empty div {
+    margin-bottom: 10px;
+    color: var(--cl-ink);
+    font-size: 24px;
+    font-weight: 750;
+    letter-spacing: -.08em;
+}
+
+.chatlingo-empty strong {
+    display: block;
+    color: var(--cl-ink);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.chatlingo-empty p {
+    margin: 7px 0 0;
+    font-size: 11px;
+    line-height: 1.65;
+}
+
+.chatlingo-hero-result {
+    position: relative;
+    padding: 14px;
+}
+
+.chatlingo-result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.chatlingo-result-actions button {
+    min-height: 27px;
+    padding: 4px 7px;
+    font-size: 10px;
+}
+
+.chatlingo-result-actions button.is-speaking,
+.chatlingo-card-actions button.is-speaking,
+.chatlingo-example button.is-speaking,
+.chatlingo-saved-word button.is-speaking {
+    color: var(--cl-ink) !important;
+    background: var(--cl-surface-subtle) !important;
+    border-color: var(--cl-line-strong) !important;
+}
+
+.chatlingo-original {
+    padding-top: 7px;
+    color: var(--cl-ink);
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 2.35;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.chatlingo-original ruby {
+    display: ruby;
+    ruby-align: center;
+    ruby-position: over;
+}
+
+.chatlingo-original rt {
+    color: var(--cl-ink-soft);
+    font-size: .52em;
+    font-weight: 550;
+    line-height: 1;
+    text-align: center;
+}
+
+.chatlingo-full-pron {
+    margin-top: 11px;
+    color: var(--cl-ink-soft);
+    font-size: 11px;
+}
+
+.chatlingo-translation {
+    margin-top: 11px;
+    padding-top: 11px;
+    color: var(--cl-ink);
+    border-top: 1px solid var(--cl-line);
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.chatlingo-context-note {
+    margin-top: 11px;
+    padding: 9px 10px;
+    color: var(--cl-ink-soft);
+    background: var(--cl-surface-subtle);
+    border-left: 2px solid #111;
+    border-radius: 0 6px 6px 0;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.chatlingo-context-note strong {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--cl-ink);
+    font-weight: 700;
+}
+
+.chatlingo-analysis-block h3 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 10px;
+    color: var(--cl-ink);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.chatlingo-analysis-block h3 span {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    color: var(--cl-ink-soft);
+    background: var(--cl-surface-subtle);
+    border: 1px solid var(--cl-line);
+    border-radius: 99px;
+    font-size: 9px;
+}
+
+.chatlingo-analysis-block ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chatlingo-analysis-block li {
+    display: grid;
+    gap: 3px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--cl-line);
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.chatlingo-analysis-block li:last-child {
+    border-bottom: 0;
+}
+
+.chatlingo-analysis-block li strong {
+    color: var(--cl-ink);
+    font-weight: 700;
+}
+
+.chatlingo-analysis-block li span {
+    color: var(--cl-ink-soft);
+}
+
+/* Vocabulary */
+.chatlingo-word-list {
+    display: grid;
+    gap: 8px;
+}
+
+.chatlingo-word-card {
+    padding: 11px;
+    background: #fff !important;
+    border: 1px solid var(--cl-line);
+    border-radius: 7px;
+}
+
+.chatlingo-word-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+}
+
+.chatlingo-word-top > div:first-child {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.chatlingo-word-select {
+    display: inline-grid;
+    place-items: center;
+    width: 15px;
+    height: 15px;
+    margin-right: 1px;
+}
+
+.chatlingo-word-select input,
+.chatlingo-bulk-actions input {
+    appearance: none !important;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    background: #fff !important;
+    border: 1px solid #bcbcbc !important;
+    border-radius: 4px;
+    box-shadow: none !important;
+}
+
+.chatlingo-vocabulary-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.chatlingo-vocabulary-heading h3 {
+    margin-bottom: 0;
+}
+
+.chatlingo-bulk-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.chatlingo-bulk-actions label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--cl-ink-soft);
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.chatlingo-bulk-actions button {
+    min-height: 26px;
+    padding: 3px 6px;
+    color: var(--cl-ink-soft) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 6px;
+    font-size: 9px;
+}
+
+.chatlingo-word-top strong {
+    color: var(--cl-ink);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.chatlingo-word-top span {
+    color: var(--cl-ink-soft);
+    font-size: 10px;
+}
+
+.chatlingo-word-top .chatlingo-pron {
+    color: var(--cl-ink-faint);
+}
+
+.chatlingo-card-actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 4px;
+}
+
+.chatlingo-card-actions button {
+    min-width: 42px;
+    height: 27px;
+    padding: 0 8px;
+    font-size: 10px;
+}
+
+.chatlingo-example button {
+    min-width: 62px;
+    height: 27px;
+    padding: 0 7px;
+    font-size: 9px;
+}
+
+.chatlingo-saved-word button {
+    min-width: 38px;
+    height: 27px;
+    padding: 0 6px;
+    font-size: 9px;
+}
+
+.chatlingo-meaning {
+    margin-top: 7px;
+    color: var(--cl-ink);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.chatlingo-meaning small {
+    margin-right: 6px;
+    padding: 2px 5px;
+    color: var(--cl-ink-soft);
+    background: var(--cl-surface-subtle);
+    border-radius: 4px;
+    font-size: 9px;
+}
+
+.chatlingo-word-card > p {
+    margin: 6px 0;
+    color: var(--cl-ink-soft);
+    font-size: 10px;
+    line-height: 1.55;
+}
+
+.chatlingo-example {
+    position: relative;
+    display: grid;
+    gap: 3px;
+    margin-top: 8px;
+    padding: 8px 75px 8px 9px;
+    color: var(--cl-ink-soft);
+    background: var(--cl-surface-subtle);
+    border-radius: 6px;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.chatlingo-example small {
+    color: var(--cl-ink-faint);
+    font-size: 10px;
+}
+
+.chatlingo-example button {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+}
+
+/* Saved wordbook and settings */
+.chatlingo-book-section > summary,
+.chatlingo-settings > summary {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--cl-ink);
+}
+
+.chatlingo-book-section > summary span {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    color: var(--cl-ink-soft);
+    background: var(--cl-surface-subtle);
+    border: 1px solid var(--cl-line);
+    border-radius: 99px;
+    font-size: 9px;
+}
+
+.chatlingo-book-section > summary > .chatlingo-svg-icon:last-child,
+.chatlingo-settings > summary > .chatlingo-svg-icon:last-child {
+    margin-left: auto;
+    margin-right: 0;
+    color: var(--cl-ink-faint);
+    transition: transform .15s ease;
+}
+
+.chatlingo-book-section[open] > summary > .chatlingo-svg-icon:last-child,
+.chatlingo-settings[open] > summary > .chatlingo-svg-icon:last-child {
+    transform: rotate(180deg);
+}
+
+#chatlingo-wordbook {
+    display: grid;
+    gap: 6px;
+    max-height: 270px;
+    margin-top: 11px;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-x: none;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+}
+
+.chatlingo-wordbook-empty {
+    margin: 0;
+    color: var(--cl-ink-faint);
+    font-size: 10px;
+}
+
+.chatlingo-saved-word {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    background: var(--cl-surface-subtle);
+    border: 1px solid var(--cl-line);
+    border-radius: 7px;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.chatlingo-saved-word > .chatlingo-saved-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 6px;
+    min-width: 0;
+}
+
+.chatlingo-saved-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.chatlingo-saved-actions button {
+    min-width: 32px;
+    padding: 0 5px;
+}
+
+.chatlingo-saved-word.is-editing {
+    display: block;
+    padding: 9px;
+}
+
+.chatlingo-saved-edit {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.chatlingo-saved-edit label {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.chatlingo-saved-edit label > span {
+    color: var(--cl-ink-soft);
+    font-size: 9px;
+}
+
+.chatlingo-saved-edit input,
+.chatlingo-saved-edit textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 6px 7px;
+    color: var(--cl-ink) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 6px;
+    box-shadow: none !important;
+    font: inherit;
+    font-size: 10px;
+    line-height: 1.45;
+    resize: vertical;
+}
+
+.chatlingo-saved-edit-wide,
+.chatlingo-saved-edit-actions {
+    grid-column: 1 / -1;
+}
+
+.chatlingo-saved-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.chatlingo-saved-edit-actions button {
+    min-width: 46px;
+}
+
+.chatlingo-saved-word strong {
+    color: var(--cl-ink);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.chatlingo-saved-word small {
+    color: var(--cl-ink-soft);
+    font-size: 9px;
+}
+
+.chatlingo-saved-select {
+    display: grid;
+    place-items: center;
+}
+
+.chatlingo-saved-select input,
+#chatlingo-saved-select-all {
+    appearance: none !important;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    background: #fff !important;
+    border: 1px solid #bcbcbc !important;
+    border-radius: 4px;
+    box-shadow: none !important;
+}
+
+.chatlingo-word-select input:checked,
+.chatlingo-bulk-actions input:checked,
+.chatlingo-saved-select input:checked,
+#chatlingo-saved-select-all:checked {
+    background: #5f5f5f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m2.5 6 2.1 2.1L9.5 3.5' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 10px no-repeat !important;
+    border-color: #5f5f5f !important;
+}
+
+.chatlingo-saved-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.chatlingo-saved-title em {
+    padding: 1px 4px;
+    color: var(--cl-ink-faint);
+    background: #fff;
+    border: 1px solid var(--cl-line);
+    border-radius: 4px;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.chatlingo-wordbook-tools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin-bottom: 7px;
+}
+
+.chatlingo-wordbook-tools select,
+.chatlingo-wordbook-tools button {
+    min-width: 0;
+    min-height: 28px;
+    padding: 4px 6px;
+    color: var(--cl-ink-soft) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 6px;
+    font-size: 9px;
+}
+
+.chatlingo-wordbook-tools button {
+    justify-self: end;
+    align-self: center;
+    width: auto;
+    min-height: 24px;
+    padding: 3px 9px;
+    border-color: var(--cl-line) !important;
+    border-radius: 99px;
+    font-size: 8.5px;
+}
+
+.chatlingo-wordbook-tools label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--cl-ink-soft);
+    font-size: 9px;
+}
+
+.chatlingo-wordbook-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-top: 5px;
+    color: var(--cl-ink-faint);
+    font-size: 9px;
+}
+
+.chatlingo-wordbook-pagination button {
+    min-height: 25px;
+    padding: 3px 7px;
+    color: var(--cl-ink-soft) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line) !important;
+    border-radius: 6px;
+    font-size: 9px;
+}
+
+.chatlingo-wordbook-pagination button:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+.chatlingo-saved-content > span {
+    grid-column: 1 / -1;
+    overflow: hidden;
+    color: var(--cl-ink-soft);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chatlingo-secondary {
+    width: auto;
+    min-height: 30px;
+    margin: 0;
+    padding: 5px 7px;
+    color: var(--cl-ink-soft) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 7px;
+    font-size: 10px !important;
+    font-weight: 500;
+    line-height: 1.25;
+}
+
+.chatlingo-wordbook-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.chatlingo-wordbook-actions > .chatlingo-secondary {
+    display: block !important;
+    width: 100% !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    margin: 0 !important;
+    padding: 5px 7px !important;
+    flex: none !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+}
+
+.chatlingo-study-export {
+    grid-column: 1 / -1;
+}
+
+.chatlingo-secondary:hover {
+    color: var(--cl-ink) !important;
+    background: var(--cl-surface-hover) !important;
+}
+
+.chatlingo-setting-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.chatlingo-setting-grid label {
+    display: grid;
+    grid-template-rows: auto 32px;
+    align-content: start;
+    gap: 5px;
+    color: var(--cl-ink-soft);
+    font-size: 10px;
+}
+
+.chatlingo-setting-grid select,
+.chatlingo-setting-grid input[type="number"] {
+    width: 100%;
+    min-width: 0;
+    min-height: 32px;
+    padding: 6px 7px;
+    color: var(--cl-ink) !important;
+    background: #fff !important;
+    border: 1px solid var(--cl-line-strong) !important;
+    border-radius: 6px;
+    font-size: 10px;
+}
+
+.chatlingo-setting-grid select:disabled,
+.chatlingo-setting-grid input:disabled {
+    color: var(--cl-ink-faint) !important;
+    background: var(--cl-surface-subtle) !important;
+    opacity: .65;
+    cursor: not-allowed;
+}
+
+.chatlingo-setting-grid input[type="number"]:focus,
+.chatlingo-setting-grid input[type="number"]:focus-visible {
+    border-color: var(--cl-ink) !important;
+    outline: none;
+}
+
+.chatlingo-setting-grid label > small {
+    color: var(--cl-ink-faint);
+    font-size: 9px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.chatlingo-setting-grid label:last-child {
+    grid-column: 1 / -1;
+}
+
+.chatlingo-setting-grid output {
+    float: right;
+    color: var(--cl-ink);
+}
+
+.chatlingo-setting-grid input[type="range"] {
+    width: 100%;
+    accent-color: #111;
+}
+
+.chatlingo-hint {
+    margin: 6px 0 0 !important;
+    color: var(--cl-ink-faint);
+    font-size: 9px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+#chatlingo-voice-status + #chatlingo-tts-source-help {
+    margin-top: 0 !important;
+}
+
+.chatlingo-setting-grid + #chatlingo-voice-status[hidden] + #chatlingo-tts-source-help {
+    margin-top: 6px !important;
+}
+
+.chatlingo-panel #chatlingo-voice-status[hidden] {
+    display: none !important;
+}
+
+.chatlingo-fallback-launcher {
+    position: fixed;
+    display: none !important;
+    z-index: 2147483645;
+    right: 18px;
+    bottom: 18px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #111 !important;
+    border-radius: 8px;
+    color: #111 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    font-family: Pretendard, "Noto Sans KR", sans-serif !important;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -1px;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    text-shadow: none !important;
+}
+
+.chatlingo-fallback-launcher[hidden] {
+    display: none !important;
+}
+
+#chatlingo-collapse .chatlingo-svg-icon {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 1024px) {
+    .chatlingo-fallback-launcher:not([hidden]) {
+        display: grid !important;
+        place-items: center;
+    }
+
+    .chatlingo-panel {
+        position: fixed !important;
+        inset: 12px 12px auto auto !important;
+        width: min(312px, calc(100vw - 104px)) !important;
+        height: min(690px, 76vh) !important;
+        max-width: 312px !important;
+        max-height: 76vh !important;
+        margin: 0 !important;
+        border: 1px solid var(--cl-line-strong) !important;
+        border-radius: var(--cl-radius);
+    }
+
+    .chatlingo-scroll {
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+
+    .chatlingo-setting-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chatlingo-setting-grid label:last-child {
+        grid-column: auto;
+    }
+
+    .chatlingo-panel.is-collapsed {
+        width: 148px !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .chatlingo-panel {
+        inset: 12px 12px auto auto !important;
+        width: min(268px, calc(100vw - 76px)) !important;
+        height: min(590px, 70vh) !important;
+        max-width: calc(100vw - 24px) !important;
+        max-height: 70vh !important;
+    }
+
+    .chatlingo-panel.is-collapsed {
+        width: 148px !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chatlingo-panel,
+    .chatlingo-book-section > summary > .chatlingo-svg-icon:last-child,
+    .chatlingo-settings > summary > .chatlingo-svg-icon:last-child {
+        transition: none;
+    }
+
+    .chatlingo-spinner {
+        animation-duration: 1.5s;
+    }
+}
