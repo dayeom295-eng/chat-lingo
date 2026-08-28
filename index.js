@@ -356,12 +356,17 @@ function inferWordLanguage(surface, fallback = 'ja') {
 function repairSavedWordLanguages() {
     let changed = false;
     for (const item of settings.savedWords || []) {
-        const language = inferWordLanguage(item.surface, item.language);
+        const surface = stripLeadingListOrdinal(item.surface);
+        if (item.surface !== surface) {
+            item.surface = surface;
+            changed = true;
+        }
+        const language = inferWordLanguage(surface, item.language);
         if (item.language !== language) {
             item.language = language;
             changed = true;
         }
-        const key = `${language}:${item.surface}:${item.meaning || ''}`;
+        const key = `${language}:${surface}:${item.meaning || ''}`;
         if (item.key !== key) {
             item.key = key;
             changed = true;
@@ -502,7 +507,18 @@ function uniqueText(items) {
 
 function stripEmbeddedMetadata(message) {
     let text = String(message || '').replace(/\r\n?/g, '\n');
-    const metadataBlock = /<(status|state|system|metadata|meta|ooc|scene|narration|think|thought|thinking|analysis|reasoning|reason|reflection|scratchpad|internal|memory|lore|author_note|summary|settings|hidden|추론|생각|사고|내면|상태|상태창|메타|설정)(?:\s[^>]*)?>[\s\S]*?<\/\1\s*>/gi;
+    // 실리태번 정규식이나 HTML 렌더링을 거친 태그는 &lt;...&gt;, \<...>, <\/...>
+    // 형태로 저장되기도 한다. 실제 메타데이터 제거 전에 모두 같은 태그 문법으로 되돌린다.
+    text = text
+        .replace(/&amp;(lt|gt);/gi, '&$1;')
+        .replace(/(?:&lt;|&#0*60;|&#x0*3c;)\s*(\/?)\s*([A-Za-z가-힣_][A-Za-z0-9가-힣_.:-]*)([\s\S]*?)(?:&gt;|&#0*62;|&#x0*3e;)/gi, '<$1$2$3>')
+        .replace(/\\+(?=<\/?[A-Za-z가-힣_])/g, '')
+        .replace(/<\\+\/(?=[A-Za-z가-힣_])/g, '</');
+    text = text.replace(
+        /<(div|span)\b[^>]*class\s*=\s*["'][^"']*\bchat-timestamp\b[^"']*["'][^>]*>[\s\S]*?<\/\1\s*>/gi,
+        '',
+    );
+    const metadataBlock = /<(status|state|system|metadata|meta|ooc|scene|narration|think|thought|thinking|analysis|reasoning|reason|reflection|scratchpad|internal|messenger_thinking|memory|lore|author_note|summary|settings|hidden|추론|생각|사고|내면|상태|상태창|메타|설정)(?:\s[^>]*)?>[\s\S]*?<\/\1\s*>/gi;
     while (metadataBlock.test(text)) {
         text = text.replace(metadataBlock, '');
         metadataBlock.lastIndex = 0;
@@ -515,7 +531,7 @@ function stripEmbeddedMetadata(message) {
         // 그 밖의 사용자 정의 태그는 상태창·추론용으로 보고 내용째 제외한다.
         .replace(/<([A-Za-z가-힣_][A-Za-z0-9가-힣_.:-]*)(?:\s[^>]*)?>[\s\S]*?<\/\1\s*>/gi, '')
         // 닫는 태그 없이 응답 끝까지 이어진 대표적인 추론 블록도 제외한다.
-        .replace(/<(?:think|thought|thinking|analysis|reasoning|reason|reflection|scratchpad|internal|추론|생각|사고|내면)(?:\s[^>]*)?>[\s\S]*$/gi, '')
+        .replace(/<(?:think|thought|thinking|analysis|reasoning|reason|reflection|scratchpad|internal|messenger_thinking|추론|생각|사고|내면)(?:\s[^>]*)?>[\s\S]*$/gi, '')
         .replace(/<[^>]*>/g, '')
         .replace(/\n{3,}/g, '\n\n')
         .trim();
@@ -631,7 +647,7 @@ JSON을 사용하지 말고 반드시 다음 구분 표시를 그대로 사용�
 원문 표현 ||| 읽기 ||| 한글 발음 ||| 품사 ||| 문맥상 뜻 ||| 뉘앙스 ||| 새 예문 ||| 예문 번역
 [[END]]
 
-GRAMMAR는 최대 6개, VOCABULARY는 학습 가치가 높은 항목을 1개 이상 최대 12개 쓴다. 다른 설명이나 머리말을 덧붙이지 않는다.
+GRAMMAR는 최대 6개, VOCABULARY는 학습 가치가 높은 항목을 1개 이상 최대 12개 쓴다. 각 표현 앞에 1., 2), (3), [4] 같은 번호를 붙이지 않는다. 다른 설명이나 머리말을 덧붙이지 않는다.
 출력 직전에 다음을 스스로 확인한다: ① ANNOTATED를 읽기 표시만 제거하면 학습 대상과 글자·문장 수가 같다. ② 일본어 한자와 가타카나에 읽기 표시가 빠짐없이 있다. ③ 발음·번역·설명·단어 뜻은 한국어다. ④ 모든 구분 표시와 VOCABULARY가 있다.
 
 [대화 문맥]
@@ -659,7 +675,7 @@ function buildStrictRetryPrompt(text, contextText, failureReason = '', failedRes
 원문 표현 ||| ${vocabularyReadingLabel} ||| 한글 발음 ||| 품사 ||| 한국어 뜻 ||| 한국어 뉘앙스 ||| 새 예문 ||| 한국어 예문 번역
 [[END]]
 
-설명에 일본어나 중국어를 대신 쓰지 않는다. PRONUNCIATION과 TRANSLATION에는 반드시 한글이 들어가야 한다. 영어 발음에는 영어 철자·로마자·IPA만 적지 않는다. 발음은 요약이 아니므로 원문의 모든 말을 처음부터 끝까지 순서대로 적는다.
+설명에 일본어나 중국어를 대신 쓰지 않는다. PRONUNCIATION과 TRANSLATION에는 반드시 한글이 들어가야 한다. 영어 발음에는 영어 철자·로마자·IPA만 적지 않는다. GRAMMAR와 VOCABULARY의 표현 앞에는 목록 번호를 붙이지 않는다. 발음은 요약이 아니므로 원문의 모든 말을 처음부터 끝까지 순서대로 적는다.
 
 [문맥]
 ${contextText || '(별도 문맥 없음)'}
@@ -1265,6 +1281,16 @@ function normalizedAnalysisKey(value) {
     return String(value || '').toLocaleLowerCase().replace(/[\s_\-·.()[\]{}]+/g, '');
 }
 
+function stripLeadingListOrdinal(value) {
+    let cleaned = String(value || '').trim();
+    const markdownWrapped = cleaned.match(/^\*\*([\s\S]+)\*\*$/);
+    if (markdownWrapped) cleaned = markdownWrapped[1].trim();
+    return cleaned.replace(
+        /^\s*(?:\(\s*\d{1,3}\s*\)|[\[【]\s*\d{1,3}\s*[\]】]|\d{1,3}\s*[)）:：、]|\d{1,3}\.(?!\d))\s*/,
+        '',
+    ).trim();
+}
+
 function findAnalysisField(data, aliases) {
     if (!data || typeof data !== 'object') return undefined;
     const wanted = new Set(aliases.map(normalizedAnalysisKey));
@@ -1307,10 +1333,10 @@ function analysisRows(value) {
 function normalizeGrammarRow(item) {
     if (typeof item === 'string') {
         const [pattern, explanation = ''] = item.split(/\s*\|\|\|\s*|\s*:\s*/, 2);
-        return { pattern: pattern || '', explanation };
+        return { pattern: stripLeadingListOrdinal(pattern), explanation };
     }
     return {
-        pattern: analysisText(findAnalysisField(item, ['pattern', 'expression', 'surface', '표현', '문법'])),
+        pattern: stripLeadingListOrdinal(analysisText(findAnalysisField(item, ['pattern', 'expression', 'surface', '표현', '문법']))),
         explanation: analysisText(findAnalysisField(item, ['explanation', 'description', 'meaning', '설명', '뜻'])),
     };
 }
@@ -1319,13 +1345,13 @@ function normalizeVocabularyRow(item) {
     if (typeof item === 'string') {
         const fields = item.split(/\s*\|\|\|\s*/);
         return {
-            surface: fields[0] || '', reading: fields[1] || '', korean_pronunciation: fields[2] || '',
+            surface: stripLeadingListOrdinal(fields[0]), reading: fields[1] || '', korean_pronunciation: fields[2] || '',
             part_of_speech: fields[3] || '', meaning: fields[4] || '', nuance: fields[5] || '',
             example: fields[6] || '', example_translation: fields[7] || '',
         };
     }
     return {
-        surface: analysisText(findAnalysisField(item, ['surface', 'word', 'term', 'expression', 'original', '원문표현', '표현', '단어'])),
+        surface: stripLeadingListOrdinal(analysisText(findAnalysisField(item, ['surface', 'word', 'term', 'expression', 'original', '원문표현', '표현', '단어']))),
         reading: analysisText(findAnalysisField(item, ['reading', 'furigana', 'kana', 'yomigana', '읽기', '후리가나'])),
         korean_pronunciation: analysisText(findAnalysisField(item, ['korean_pronunciation', 'korean pronunciation', 'pronunciation_ko', '한글발음', '한국어발음'])),
         part_of_speech: analysisText(findAnalysisField(item, ['part_of_speech', 'part of speech', 'pos', '품사'])),

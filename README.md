@@ -32,7 +32,7 @@
 
 이 폴더를 `chatlingo`라는 이름으로 아래 위치 중 하나에 넣고 실리태번을 새로고침합니다.
 
-- 개인 설치: `SillyTavern/data/<사용자>/extensions/chatlingo`
+- 개인 설치: `SillyTavern/data/default-user/extensions/chatlingo`
 - 개발 설치: `SillyTavern/public/scripts/extensions/third-party/chatlingo`
 
 ---
